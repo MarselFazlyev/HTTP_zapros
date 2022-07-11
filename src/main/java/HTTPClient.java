@@ -16,7 +16,7 @@ public class HTTPClient {
     public static final ObjectMapper mapper = new ObjectMapper();
 
     public static void main(String[] args) throws IOException {
-        CloseableHttpClient HTTPClient = HttpClientBuilder.create()
+        CloseableHttpClient httpClient = HttpClientBuilder.create()
                 .setDefaultRequestConfig(RequestConfig.custom()
                         .setConnectTimeout(5000)
                         .setSocketTimeout(30000)
@@ -25,14 +25,14 @@ public class HTTPClient {
                 .build();
 
         HttpGet request = new HttpGet(REMOTE_SERVICE_URI);
-        CloseableHttpResponse response = HTTPClient.execute(request);
+        CloseableHttpResponse response = httpClient.execute(request);
 //        System.out.println(response);
 //        Arrays.stream(response.getAllHeaders()).forEach(System.out::println);
         String body = EntityUtils.toString(response.getEntity());
 //        System.out.println(body);
         List<Cats> cats = mapper.readValue(body, new TypeReference<List<Cats>>() {
         });
-        List<Cats> notNullUpvotes = cats.stream().filter(x -> x.getUpvotes() != null).collect(Collectors.toList());
+        List<Cats> notNullUpvotes = cats.stream().filter(x -> x.getUpvotes() != 0).collect(Collectors.toList());
         System.out.println(notNullUpvotes);
 
     }
